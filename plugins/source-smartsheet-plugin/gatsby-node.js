@@ -1,6 +1,7 @@
 const fetch = require("node-fetch")
 
 // constants for your GraphQL Column and Row types
+const BASE_NODE_TYPE = `SmartSheetNode`
 const COLUMN_NODE_TYPE = `SmartSheetColumn`
 const ROW_NODE_TYPE = `SmartSheetRow`
 
@@ -9,11 +10,10 @@ exports.sourceNodes = async (
   configOptions
 ) => {
   const { createNode } = actions
-  delete configOptions.plugins
 
   const apiUrl = `https://api.smartsheet.com/2.0/sheets/${configOptions.sheetId}`
   // const response = await fetch(apiUrl);
-  const response = await fetch(apiUrl, {
+  let response = await fetch(apiUrl, {
     method: "get",
     headers: {
       Authorization: `Bearer ${configOptions.accessToken}`,
@@ -23,6 +23,19 @@ exports.sourceNodes = async (
     },
   })
   const data = await response.json()
+
+  const node = {
+    id: createNodeId(`${BASE_NODE_TYPE}-${data.id}`),
+    name: data.name,
+    permalink: data.permalink,
+    totalRowCount: data.totalRowCount,
+    internal: {
+      type: BASE_NODE_TYPE,
+      contentDigest: createContentDigest(data),
+    },
+  }
+
+  createNode(node)
 
   data.columns.forEach(column => {
     createNode({
