@@ -8,13 +8,12 @@ export default function Home({ data }) {
   const rows = data.allSmartSheetRow.edges
   // const pageTitleID = process.env.GATSBY_SMARTSHEET_PAGETITLEID
 
+  const pageTitleID = parseInt(process.env.GATSBY_SMARTSHEET_PAGETITLEID)
+
   const filterByPageTitle = item => {
-    if (item.columnId === 1052964067534724) {
+    if (item.columnId === pageTitleID) {
       return true
     }
-    // if (item.columnId === process.env.GATSBY_SMARTSHEET_PAGETITLEID) {
-    //   return true
-    // }
   }
 
   const filteredRows = rows.map(item => {
