@@ -35,10 +35,10 @@ export default function Home({ data }) {
 
   return (
     <div style={{ height: "100vh" }}>
-      <h1>St. Leo Sitemap</h1>
+      <h1>{data.smartSheetNode.name}</h1>
       <p className="ss-link">
         <a
-          href="https://app.smartsheet.com/sheets/7gp3XM3fr82gf7JHvffhgXHPJWJqVRMw59PmhWJ1"
+          href={data.smartSheetNode.permalink}
           target="_blank"
           rel="nofollow noopener noreferrer"
         >
@@ -64,6 +64,10 @@ export const query = graphql`
           }
         }
       }
+    }
+    smartSheetNode {
+      name
+      permalink
     }
   }
 `
