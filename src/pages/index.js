@@ -23,8 +23,7 @@ export default function Home({ data }) {
     container.pid = item.node.parentId
     // console.log("item.node.cells", item.node.cells)
     item.node.cells.filter(filterByPageTitle).map(cell => {
-      container.name = cell.displayValue
-      return console.log("grabbing cells")
+      return (container.name = cell.displayValue)
     })
 
     return container
