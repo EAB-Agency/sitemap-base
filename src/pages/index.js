@@ -6,19 +6,30 @@ import "../App.css"
 export default function Home({ data }) {
   // const columns = data.allSmartSheetColumn.edges
   const rows = data.allSmartSheetRow.edges
-  // const pageTitleID = process.env.GATSBY_SMARTSHEET_PAGETITLEID
+  const columns = data.allSmartSheetColumn.edges
 
-  const pageTitleID = parseInt(process.env.GATSBY_SMARTSHEET_PAGETITLEID)
+  // find column with "Page Title" name
+  const pageTitleIDFilter = item => {
+    if (item.node.title === "Page Title") {
+      return true
+    }
+  }
 
+  // grap "Page Title" column ID
+  const pageTitleID = columns.filter(pageTitleIDFilter).map(column => {
+    return parseInt(column.node.id)
+  })
+
+  // grab only columns that have the page title
   const filterByPageTitle = item => {
     if (item.columnId === pageTitleID) {
       return true
     }
   }
 
+  // map over rows and grab contents
   const filteredRows = rows.map(item => {
     const container = {}
-
     container.id = item.node.id
     container.pid = item.node.parentId
     // console.log("item.node.cells", item.node.cells)
@@ -29,7 +40,7 @@ export default function Home({ data }) {
     return container
   })
 
-  console.log("-------filteredRows", filteredRows)
+  // console.log("-------filteredRows", filteredRows)
 
   return (
     <div style={{ height: "100vh" }}>
@@ -66,6 +77,14 @@ export const query = graphql`
     smartSheetNode {
       name
       permalink
+    }
+    allSmartSheetColumn {
+      edges {
+        node {
+          title
+          id
+        }
+      }
     }
   }
 `
