@@ -16,15 +16,14 @@ export default function Home({ data }) {
   }
 
   // grap "Page Title" column ID
-  const pageTitleID = columns.filter(pageTitleIDFilter).map(column => {
+  let pageTitleID = columns.filter(pageTitleIDFilter).map(column => {
     return parseInt(column.node.id)
   })
+  pageTitleID = pageTitleID[0]
 
   // grab only columns that have the page title
   const filterByPageTitle = item => {
-    if (item.columnId === pageTitleID) {
-      return true
-    }
+    return item.columnId === pageTitleID
   }
 
   // map over rows and grab contents
