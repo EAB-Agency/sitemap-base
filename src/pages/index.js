@@ -8,22 +8,41 @@ export default function Home({ data }) {
   const rows = data.allSmartSheetRow.edges
   const columns = data.allSmartSheetColumn.edges
 
-  // find column with "Page Title" name
-  const pageTitleIDFilter = item => {
-    if (item.node.title === "Page Title") {
-      return true
+  // find column with "specific name" name
+  const getColumnIDByName = wordToCompare => {
+    return function (element) {
+      return element.node.title === wordToCompare
     }
   }
 
   // grap "Page Title" column ID
-  let pageTitleID = columns.filter(pageTitleIDFilter).map(column => {
-    return parseInt(column.node.id)
-  })
+  let pageTitleID = columns
+    .filter(getColumnIDByName("Page Title"))
+    .map(column => {
+      // console.log("grabbing pageTitleID", column.node.id)
+      return parseInt(column.node.id)
+    })
   pageTitleID = pageTitleID[0]
+  console.log("-------actual pageTitleID", pageTitleID)
+
+  // grap "Page Title" column ID
+  let pageTypeID = columns
+    .filter(getColumnIDByName("Page Type"))
+    .map(column => {
+      // console.log("grabbing pageTypeID", column.node.id)
+      return parseInt(column.node.id)
+    })
+  pageTypeID = pageTypeID[0]
+  console.log("-------actual pageTypeID", pageTypeID)
 
   // grab only columns that have the page title
   const filterByPageTitle = item => {
     return item.columnId === pageTitleID
+  }
+
+  // grab only columns that have the page type
+  const filterByPageType = item => {
+    return item.columnId === pageTypeID
   }
 
   // map over rows and grab contents
@@ -31,8 +50,14 @@ export default function Home({ data }) {
     const container = {}
     container.id = item.node.id
     container.pid = item.node.parentId
-    // console.log("item.node.cells", item.node.cells)
+
+    item.node.cells.filter(filterByPageType).map(cell => {
+      // console.log("filterByPageType: ", cell.displayValue)
+      return (container.tags = [cell.displayValue])
+    })
+
     item.node.cells.filter(filterByPageTitle).map(cell => {
+      // console.log("filterByPageTitle: ", cell.displayValue)
       return (container.name = cell.displayValue)
     })
 
