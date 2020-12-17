@@ -7,7 +7,13 @@ export default function Home({ data }) {
   // const columns = data.allSmartSheetColumn.edges
   const rows = data.allSmartSheetRow.edges
   const columns = data.allSmartSheetColumn.edges
-  const allColumnTitlesToParse = ["Page Title", "Page Type", "Source URL"]
+  console.log(columns)
+  const allColumnTitlesToParse = [
+    "Page Title",
+    "Page Type",
+    "Source URL",
+    "Main Nav",
+  ]
   // .map(item => item.replace(/\s/g, "_"))
 
   // find column with "specific name" name
@@ -47,15 +53,36 @@ export default function Home({ data }) {
     .map(item => grabColumnID(item))
     .shift()
 
-  console.log("all the ids", pageTitleID, pageTypeID, sourceURLID)
+  // console.log("all the ids", pageTitleID, pageTypeID, sourceURLID)
 
   // map over rows and grab contents
-  const filteredRows = rows.map(row => {
+  const filteredRows = rows.map(function (row, index, array) {
     row = row.node
     const container = {}
     container.id = row.id
     container.pid = row.parentId
 
+    // console.log("The array is: ", array)
+    // console.log('The value of "this" is', this)
+    // console.log("The index is: ", index)
+    allColumnIDs.map(function (columnID, indexOfColumnID) {
+      console.log("*************allColumnIDs: The columnID", columnID)
+      // console.log('allColumnIDs: The value of "this" is', this)
+      // console.log("allColumnIDs: The i is: ", i)
+
+      row.cells
+        .filter(function (cell) {
+          return cell.columnId === this
+        }, columnID)
+        .map(function (cell) {
+          console.log('row.cells: The value of "this" is', this)
+
+          console.log("cell.displayValue", cell.displayValue)
+          console.log("=============columnID", this)
+          container[`field_${indexOfColumnID}`] = cell.displayValue
+          return (container.name = cell.displayValue)
+        }, indexOfColumnID)
+    })
     row.cells
       .filter(item => item.columnId === pageTypeID)
       .map(cell => (container.tags = [cell.displayValue]))

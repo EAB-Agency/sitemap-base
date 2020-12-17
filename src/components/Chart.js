@@ -151,7 +151,7 @@ export default class MyChart extends Component {
 
       nodeBinding: {
         field_0: "name",
-        sourceUrl: "sourceUrl",
+        sourceUrl: "field_2",
       },
     })
   }
