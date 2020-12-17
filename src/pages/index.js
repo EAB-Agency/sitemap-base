@@ -7,59 +7,66 @@ export default function Home({ data }) {
   // const columns = data.allSmartSheetColumn.edges
   const rows = data.allSmartSheetRow.edges
   const columns = data.allSmartSheetColumn.edges
+  const allColumnTitlesToParse = ["Page Title", "Page Type", "Source URL"]
+  // .map(item => item.replace(/\s/g, "_"))
 
   // find column with "specific name" name
-  const getColumnIDByName = wordToCompare => {
+  const filterColumnByName = wordToCompare => {
     return function (element) {
       return element.node.title === wordToCompare
     }
   }
-
-  // grap "Page Title" column ID
-  let pageTitleID = columns
-    .filter(getColumnIDByName("Page Title"))
-    .map(column => {
-      // console.log("grabbing pageTitleID", column.node.id)
-      return parseInt(column.node.id)
-    })
-  pageTitleID = pageTitleID[0]
-  console.log("-------actual pageTitleID", pageTitleID)
-
-  // grap "Page Title" column ID
-  let pageTypeID = columns
-    .filter(getColumnIDByName("Page Type"))
-    .map(column => {
-      // console.log("grabbing pageTypeID", column.node.id)
-      return parseInt(column.node.id)
-    })
-  pageTypeID = pageTypeID[0]
-  console.log("-------actual pageTypeID", pageTypeID)
-
-  // grab only columns that have the page title
-  const filterByPageTitle = item => {
-    return item.columnId === pageTitleID
+  const grabColumnID = item => {
+    item = item.node.id
+    return parseInt(item)
   }
 
-  // grab only columns that have the page type
-  const filterByPageType = item => {
-    return item.columnId === pageTypeID
-  }
+  // grab all the columnIDs from titles
+  const allColumnIDs = allColumnTitlesToParse.map(title => {
+    console.log("title inside allColumnTitlesToParse", title)
+    let id = columns
+      .filter(filterColumnByName(title))
+      .map(item => grabColumnID(item))
+      .shift()
+    return id
+  })
+  console.log("allColumnIDs: ", allColumnIDs)
+  // grab "Page Title" column ID
+  const pageTitleID = columns
+    .filter(filterColumnByName("Page Title"))
+    .map(item => grabColumnID(item))
+    .shift()
+
+  const pageTypeID = columns
+    .filter(filterColumnByName("Page Type"))
+    .map(item => grabColumnID(item))
+    .shift()
+
+  const sourceURLID = columns
+    .filter(filterColumnByName("Source URL"))
+    .map(item => grabColumnID(item))
+    .shift()
+
+  console.log("all the ids", pageTitleID, pageTypeID, sourceURLID)
 
   // map over rows and grab contents
-  const filteredRows = rows.map(item => {
+  const filteredRows = rows.map(row => {
+    row = row.node
     const container = {}
-    container.id = item.node.id
-    container.pid = item.node.parentId
+    container.id = row.id
+    container.pid = row.parentId
 
-    item.node.cells.filter(filterByPageType).map(cell => {
-      // console.log("filterByPageType: ", cell.displayValue)
-      return (container.tags = [cell.displayValue])
-    })
+    row.cells
+      .filter(item => item.columnId === pageTypeID)
+      .map(cell => (container.tags = [cell.displayValue]))
 
-    item.node.cells.filter(filterByPageTitle).map(cell => {
-      // console.log("filterByPageTitle: ", cell.displayValue)
-      return (container.name = cell.displayValue)
-    })
+    row.cells
+      .filter(item => item.columnId === pageTitleID)
+      .map(cell => (container.name = cell.displayValue))
+
+    row.cells
+      .filter(item => item.columnId === sourceURLID)
+      .map(cell => (container.sourceUrl = cell.displayValue))
 
     return container
   })
