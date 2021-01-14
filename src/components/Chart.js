@@ -1,5 +1,7 @@
 import React, { Component } from "react"
-import OrgChart from "@balkangraph/orgchart.js"
+// import OrgChart from "@balkangraph/orgchart.js"
+
+import OrgChart from "../orgchart"
 
 OrgChart.templates.GenericInterior = Object.assign({}, OrgChart.templates.rony)
 OrgChart.templates.GenericInterior.size = [120, 240]
@@ -151,7 +153,7 @@ export default class MyChart extends Component {
       },
 
       nodeBinding: {
-        field_0: "name",
+        // field_0: "name",
         sourceUrl: "field_2",
       },
     })

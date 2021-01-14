@@ -66,7 +66,7 @@ export default function Home({ data }) {
     // console.log('The value of "this" is', this)
     // console.log("The index is: ", index)
     allColumnIDs.map(function (columnID, indexOfColumnID) {
-      console.log("*************allColumnIDs: The columnID", columnID)
+      // console.log("*************allColumnIDs: The columnID", columnID)
       // console.log('allColumnIDs: The value of "this" is', this)
       // console.log("allColumnIDs: The i is: ", i)
 
@@ -87,13 +87,13 @@ export default function Home({ data }) {
       .filter(item => item.columnId === pageTypeID)
       .map(cell => (container.tags = [cell.displayValue]))
 
-    row.cells
-      .filter(item => item.columnId === pageTitleID)
-      .map(cell => (container.name = cell.displayValue))
+    // row.cells
+    //   .filter(item => item.columnId === pageTitleID)
+    //   .map(cell => (container.name = cell.displayValue))
 
-    row.cells
-      .filter(item => item.columnId === sourceURLID)
-      .map(cell => (container.sourceUrl = cell.displayValue))
+    // row.cells
+    //   .filter(item => item.columnId === sourceURLID)
+    //   .map(cell => (container.sourceUrl = cell.displayValue))
 
     return container
   })
