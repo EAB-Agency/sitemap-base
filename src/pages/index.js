@@ -36,7 +36,7 @@ export default function Home({ data }) {
       .shift()
     return id
   })
-  // console.log("allColumnIDs: ", allColumnIDs)
+  console.log("allColumnIDs: ", allColumnIDs)
   // grab "Page Title" column ID
   const pageTitleID = columns
     .filter(filterColumnByName("Page Title"))
@@ -49,16 +49,21 @@ export default function Home({ data }) {
     .shift()
 
   const sourceURLID = columns
-    .filter(filterColumnByName("Source URL"))
+    .filter(filterColumnByName("New URL"))
     .map(item => grabColumnID(item))
     .shift()
 
-  // console.log("all the ids", pageTitleID, pageTypeID, sourceURLID)
+  console.log(
+    "pageTitleID, pageTypeID, sourceURLID",
+    pageTitleID,
+    pageTypeID,
+    sourceURLID
+  )
 
   // map over rows and grab contents
   const filteredRows = rows.map(function (row, index, array) {
     row = row.node
-    const container = {}
+    let container = {}
     container.id = row.id
     container.pid = row.parentId
 
@@ -75,8 +80,6 @@ export default function Home({ data }) {
           return cell.columnId === this
         }, columnID)
         .map(function (cell) {
-          // console.log('row.cells: The value of "this" is', this)
-
           // console.log("cell.displayValue", cell.displayValue)
           // console.log("=============columnID", this)
           container[`field_${indexOfColumnID}`] = cell.displayValue
@@ -87,18 +90,18 @@ export default function Home({ data }) {
       .filter(item => item.columnId === pageTypeID)
       .map(cell => (container.tags = [cell.displayValue]))
 
-    // row.cells
-    //   .filter(item => item.columnId === pageTitleID)
-    //   .map(cell => (container.name = cell.displayValue))
+    row.cells
+      .filter(item => item.columnId === pageTitleID)
+      .map(cell => (container.name = cell.displayValue))
 
-    // row.cells
-    //   .filter(item => item.columnId === sourceURLID)
-    //   .map(cell => (container.sourceUrl = cell.displayValue))
+    row.cells
+      .filter(item => item.columnId === sourceURLID)
+      .map(cell => (container.sourceUrl = cell.displayValue))
 
     return container
   })
 
-  // console.log("-------filteredRows", filteredRows)
+  console.log("-------filteredRows", filteredRows)
 
   return (
     <div style={{ height: "100vh" }}>
