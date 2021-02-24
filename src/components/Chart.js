@@ -156,7 +156,7 @@ export default class MyChart extends Component {
       nodeBinding: {
         field_0: "Page Name",
         sourceUrl: "sourceUrl",
-        figmaUrl: "figmaUrl",
+        figmaUrl: "Prototype",
       },
     })
   }
