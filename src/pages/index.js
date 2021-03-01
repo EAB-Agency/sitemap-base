@@ -50,7 +50,7 @@ export default function Home({ data }) {
     .shift()
 
   const sourceURLID = columns
-    .filter(filterColumnByName("New URL"))
+    .filter(filterColumnByName("Source URL"))
     .map(item => grabColumnID(item))
     .shift()
 
