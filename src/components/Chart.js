@@ -196,15 +196,29 @@ export default class MyChart extends Component {
     })
 
     this.chart.editUI.on("field", function (sender, args) {
-      if (
-        args.name === "Prototype" ||
-        args.name === "sourceUrl" ||
-        args.name === "note"
-      ) {
+      if (args.name === "Prototype" || args.name === "sourceUrl") {
         var txt = args.field.querySelector("input").value
-        console.log(txt)
+        console.log("txt: ", txt)
         if (!txt) {
           return false
+        }
+
+        if (txt) {
+          var node = sender.node.id
+          console.log("sender.node.id", sender.node)
+          var a = document.createElement("a")
+          console.log("node.page", node.page)
+          var linkText = document.createTextNode(txt)
+          a.appendChild(linkText)
+          a.title = txt
+
+          a.href = txt
+          a.target = "_blank"
+
+          var parent = args.field.querySelector("div")
+          var br = document.createElement("br")
+          parent.appendChild(br)
+          parent.appendChild(a)
         }
       }
     })
