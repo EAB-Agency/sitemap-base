@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import OrgChart from "../orgchart"
 import nodeMenuButton from "./svg/nodeMenuButton"
+import dot from "./svg/dot"
 /* eslint-disable no-unused-vars */
 import GenericInterior from "./svg/GenericInterior"
 import LandingPage from "./svg/LandingPage"
@@ -35,6 +36,9 @@ OrgChart.templates.GenericInterior.sourceUrl =
 
 OrgChart.templates.GenericInterior.figmaUrl =
   '<g transform="matrix(0.015,0,0,0.015,100,130)"><a target="_blank" xlink:href="{val}"><path d="M137.7,826.4A137.8,137.8,0,0,0,275.5,688.7V550.9H137.7a137.8,137.8,0,0,0,0,275.5Z" style="fill:#0acf83"/><path d="M0,413.2A137.8,137.8,0,0,1,137.7,275.5H275.5V550.9H137.7A137.8,137.8,0,0,1,0,413.2Z" style="fill:#a259ff"/><path d="M0,137.7A137.8,137.8,0,0,1,137.7,0H275.5V275.5H137.7A137.8,137.8,0,0,1,0,137.7Z" style="fill:#f24e1e"/><path d="M275.5,0H413.2a137.8,137.8,0,0,1,0,275.5H275.5Z" style="fill:#ff7262"/><path d="M550.9,413.2A137.7,137.7,0,1,1,413.2,275.5,137.8,137.8,0,0,1,550.9,413.2Z" style="fill:#1abcfe"/></a></g>'
+
+OrgChart.templates.GenericInterior.Batch = dot
+// '<g transform="matrix(1,0,0,1,18,130)" control-node-menu-id="{id}"><circle cx="0" cy="0" r="12" fill="#1ABCFE"/><text style="font-size: 12px;" fill="#fff" x="0" y="5" text-anchor="middle">{val}</text></g>'
 
 const pages = {
   // GenericInterior is already defined above
@@ -192,6 +196,7 @@ export default class MyChart extends Component {
         field_0: "Page Name",
         sourceUrl: "sourceUrl",
         figmaUrl: "Prototype",
+        Batch: "Batch",
       },
     })
 
@@ -204,10 +209,9 @@ export default class MyChart extends Component {
         }
 
         if (txt) {
-          var node = sender.node.id
-          console.log("sender.node.id", sender.node)
+          console.log("sender.....", sender)
+          console.log("args.....", args)
           var a = document.createElement("a")
-          console.log("node.page", node.page)
           var linkText = document.createTextNode(txt)
           a.appendChild(linkText)
           a.title = txt
