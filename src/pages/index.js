@@ -14,6 +14,7 @@ export default function Home({ data }) {
     "Source URL",
     "Main Nav",
     "Notes",
+    "Batch",
   ]
   // .map(item => item.replace(/\s/g, "_"))
 
@@ -63,14 +64,19 @@ export default function Home({ data }) {
     .filter(filterColumnByName("Notes"))
     .map(item => grabColumnID(item))
     .shift()
+  const batchID = columns
+    .filter(filterColumnByName("Batch"))
+    .map(item => grabColumnID(item))
+    .shift()
 
   console.log(
-    "pageTitleID, pageTypeID, sourceURLID, figmaUrlID, noteID",
+    "pageTitleID, pageTypeID, sourceURLID, figmaUrlID, noteID, batchID",
     pageTitleID,
     pageTypeID,
     sourceURLID,
     figmaUrlID,
-    noteID
+    noteID,
+    batchID
   )
 
   // map over rows and grab contents
@@ -121,6 +127,9 @@ export default function Home({ data }) {
     row.cells
       .filter(item => item.columnId === noteID)
       .map(cell => (container.note = cell.displayValue))
+    row.cells
+      .filter(item => item.columnId === batchID)
+      .map(cell => (container.Batch = cell.displayValue))
 
     return container
   })

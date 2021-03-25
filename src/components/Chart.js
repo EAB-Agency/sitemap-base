@@ -194,6 +194,20 @@ export default class MyChart extends Component {
         figmaUrl: "Prototype",
       },
     })
+
+    this.chart.editUI.on("field", function (sender, args) {
+      if (
+        args.name === "Prototype" ||
+        args.name === "sourceUrl" ||
+        args.name === "note"
+      ) {
+        var txt = args.field.querySelector("input").value
+        console.log(txt)
+        if (!txt) {
+          return false
+        }
+      }
+    })
   }
 
   render() {
