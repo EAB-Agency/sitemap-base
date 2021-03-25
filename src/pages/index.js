@@ -138,7 +138,12 @@ export default function Home({ data }) {
       .map(cell => (container.Batch = cell.displayValue))
     row.cells
       .filter(item => item.columnId === newPageID)
-      .map(cell => (container.NewPage = cell.displayValue))
+      .map(cell =>
+        cell.displayValue === "YES"
+          ? (container.NewPage = cell.displayValue)
+          : ""
+      )
+    // cell => console.log("newpage value: ", cell.displayValue)
 
     return container
   })
