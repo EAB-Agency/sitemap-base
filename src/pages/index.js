@@ -7,17 +7,16 @@ export default function Home({ data }) {
   // const columns = data.allSmartSheetColumn.edges
   const rows = data.allSmartSheetRow.edges
   const columns = data.allSmartSheetColumn.edges
-  // console.log(columns)
-  const allColumnTitlesToParse = [
-    "Page Title",
-    "Page Type",
-    "Source URL",
-    "Main Nav",
-    "Notes",
-    "Batch",
-    "New Page",
+
+  let theColumns = [
+    { title: "Page Title" },
+    { title: "Page Type" },
+    { title: "Source URL" },
+    { title: "Main Nav" },
+    { title: "Notes" },
+    { title: "Batch" },
+    { title: "New Page?" },
   ]
-  // .map(item => item.replace(/\s/g, "_"))
 
   // find column with "specific name" name
   const filterColumnByName = wordToCompare => {
@@ -30,19 +29,28 @@ export default function Home({ data }) {
     return parseInt(item)
   }
 
-  // grab all the columnIDs from titles
-  const allColumnIDs = allColumnTitlesToParse.map(title => {
-    // console.log("title inside allColumnTitlesToParse", title)
-    // title = title.replace(/\s/g, "")
-    console.log("title in the mapping:", title)
+  const filterNameFromGraphqlAndReturnColumnID = title => {
     let id = columns
       .filter(filterColumnByName(title))
       .map(item => grabColumnID(item))
       .shift()
-    console.log("parsed id:", id)
     return id
-  })
-  console.log("allColumnIDs: ", allColumnIDs)
+  }
+
+  theColumns = theColumns.map(obj => ({
+    ...obj,
+    id: filterNameFromGraphqlAndReturnColumnID(obj.title),
+    columnIDName: obj.title.replace(/\s/g, ""),
+  }))
+  // console.log("theColumns....--------", theColumns)
+
+  // theColumns.map(obj => {
+  //   console.log("Column Title: ", obj.title)
+  //   console.log("Column ID: ", obj.id)
+  //   console.log("columnIDName: ", obj.columnIDName)
+  //   console.log("------------")
+  // })
+
   // grab "Page Title" column ID
   const pageTitleID = columns
     .filter(filterColumnByName("Page Title"))
@@ -95,50 +103,18 @@ export default function Home({ data }) {
     container.id = row.id
     container.pid = row.parentId
 
-    // console.log("The array is: ", array)
-    // console.log('The value of "this" is', this)
-    // console.log("The index is: ", index)
-    // allColumnIDs.map(function (columnID, indexOfColumnID) {
-    // console.log("*************allColumnIDs: The columnID", columnID)
-    // console.log('allColumnIDs: The value of "this" is', this)
-    // console.log("allColumnIDs: The i is: ", i)
-    //
-    //
-    // below code loops through all of the fields_# to expose them all to the Chart
-    //
-    // row.cells
-    //   .filter(function (cell) {
-    //     return cell.columnId === this;
-    //   }, columnID)
-    //   .map(function (cell) {
-    //     // console.log("cell.displayValue", cell.displayValue)
-    //     // console.log("=============columnID", this)
-    //     container[`field_${indexOfColumnID}`] = cell.displayValue;
-    //     return (container.name = cell.displayValue);
-    //   }, indexOfColumnID);
-    // })
+    // will grab all of the columns and map the cell entry, except tags and newPage. those are below
+    theColumns.map(column => {
+      return row.cells
+        .filter(item => item.columnId === column.id)
+        .map(cell => (container[column.columnIDName] = [cell.displayValue]))
+    })
+
+    // specialized filtering
     row.cells
       .filter(item => item.columnId === pageTypeID)
       .map(cell => (container.tags = [cell.displayValue]))
 
-    row.cells
-      .filter(item => item.columnId === pageTitleID)
-      .map(cell => (container["Page Name"] = cell.displayValue))
-
-    row.cells
-      .filter(item => item.columnId === sourceURLID)
-      .map(cell => (container.sourceUrl = cell.displayValue))
-
-    row.cells
-      .filter(item => item.columnId === figmaUrlID)
-      .map(cell => (container["Prototype"] = cell.displayValue))
-
-    row.cells
-      .filter(item => item.columnId === noteID)
-      .map(cell => (container.note = cell.displayValue))
-    row.cells
-      .filter(item => item.columnId === batchID)
-      .map(cell => (container.Batch = cell.displayValue))
     row.cells
       .filter(item => item.columnId === newPageID)
       .map(cell =>
@@ -146,12 +122,10 @@ export default function Home({ data }) {
           ? (container.NewPage = cell.displayValue)
           : ""
       )
-    // cell => console.log("newpage value: ", cell.displayValue)
-
     return container
   })
 
-  console.log("-------filteredRows", filteredRows)
+  // console.log("-------filteredRows", filteredRows)
 
   return (
     <div style={{ height: "100vh" }}>

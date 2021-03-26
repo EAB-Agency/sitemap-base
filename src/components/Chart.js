@@ -100,8 +100,8 @@ export default class MyChart extends Component {
   }
 
   componentDidMount() {
-    console.log("this.propsssssssssss", this.props.nodes)
-    console.log("OrgChart.templates---------", OrgChart.templates)
+    // console.log("this.propsssssssssss", this.props.nodes)
+    // console.log("OrgChart.templates---------", OrgChart.templates)
     this.chart = new OrgChart(this.divRef.current, {
       nodes: this.props.nodes,
       mouseScrool: OrgChart.action.scroll,
@@ -195,7 +195,7 @@ export default class MyChart extends Component {
       },
 
       nodeBinding: {
-        field_0: "Page Name",
+        field_0: "PageTitle",
         sourceUrl: "sourceUrl",
         figmaUrl: "Prototype",
         Batch: "Batch",
