@@ -33,10 +33,13 @@ export default function Home({ data }) {
   // grab all the columnIDs from titles
   const allColumnIDs = allColumnTitlesToParse.map(title => {
     // console.log("title inside allColumnTitlesToParse", title)
+    // title = title.replace(/\s/g, "")
+    console.log("title in the mapping:", title)
     let id = columns
       .filter(filterColumnByName(title))
       .map(item => grabColumnID(item))
       .shift()
+    console.log("parsed id:", id)
     return id
   })
   console.log("allColumnIDs: ", allColumnIDs)
