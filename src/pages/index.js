@@ -16,6 +16,7 @@ export default function Home({ data }) {
     { title: "Notes" },
     { title: "Batch" },
     { title: "New Page?" },
+    { title: "Prototype" },
   ]
 
   // find column with "specific name" name
@@ -86,7 +87,7 @@ export default function Home({ data }) {
     .shift()
 
   console.log(
-    "pageTitleID, pageTypeID, sourceURLID, figmaUrlID, noteID, batchID, newPageID",
+    // "pageTitleID, pageTypeID, sourceURLID, figmaUrlID, noteID, batchID, newPageID",
     pageTitleID,
     pageTypeID,
     sourceURLID,
@@ -107,7 +108,12 @@ export default function Home({ data }) {
     theColumns.map(column => {
       return row.cells
         .filter(item => item.columnId === column.id)
-        .map(cell => (container[column.columnIDName] = [cell.displayValue]))
+        .filter(function (cell) {
+          return cell.displayValue !== null
+        })
+        .map(cell => {
+          return (container[column.columnIDName] = [cell.displayValue])
+        })
     })
 
     // specialized filtering
@@ -122,6 +128,7 @@ export default function Home({ data }) {
           ? (container.NewPage = cell.displayValue)
           : ""
       )
+    // console.log("the container being sent:", container)
     return container
   })
 
